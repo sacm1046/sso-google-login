@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { useGoogleLogout } from 'react-google-login';
-import GoogleButton from '../components/googleButton/GoogleButton';
+import { GoogleLogout } from 'react-google-login';
 import { UserInterface } from '../models/userInterface'
 
 interface Props {
@@ -8,25 +7,7 @@ interface Props {
     user: UserInterface;
 }
 
-const clientId = '635810294506-bmomp5mvp0fga3akpmu99al6v5alli8f.apps.googleusercontent.com';
-
 const Dashboard: FC<Props> = ({ logout, user }) => {
-
-    const onLogoutSuccess = () => {
-        console.log('Logged out Success');
-        logout();
-    };
-
-    const onFailure = () => {
-        console.log('Handle failure cases');
-    };
-
-    const { signOut } = useGoogleLogout({
-        clientId,
-        onLogoutSuccess,
-        onFailure,
-    });
-
     return (
         <div style={{
             display: 'flex',
@@ -43,7 +24,11 @@ const Dashboard: FC<Props> = ({ logout, user }) => {
                     borderRadius: '50%',
                 }} />
             <p>{user.name}</p>
-            <GoogleButton onClick={signOut} text='Cerrar Sesión' />
+            <GoogleLogout
+                clientId="635810294506-bmomp5mvp0fga3akpmu99al6v5alli8f.apps.googleusercontent.com"
+                buttonText="Logout"
+                onLogoutSuccess={logout}
+            ></GoogleLogout>
         </div>
     )
 }
