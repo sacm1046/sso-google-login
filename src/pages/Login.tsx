@@ -1,24 +1,36 @@
 import React, { FC } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import { useGoogleLogin } from 'react-google-login';
+import { refreshTokenSetup } from '../utils/refreshToken';
 import { UserInterface } from '../models/userInterface';
+import GoogleButton from '../components/googleButton/GoogleButton';
 
 interface Props {
-    login: (user:UserInterface) => void;
+    login: (user: UserInterface) => void;
 }
 
-const Login: FC<Props> = ({login}) => {
+const clientId = '635810294506-bmomp5mvp0fga3akpmu99al6v5alli8f.apps.googleusercontent.com';
 
-    
-    const responseGoogle = async(response:any) => {
-        try {
-            const userData = await response.profileObj
-            console.log(userData)
-            userData && login(userData) 
-        } catch (error) {
-            console.log(error)
-        }
-    }
+const Login: FC<Props> = ({ login }) => {
+    const onSuccess = (res: any) => {
+        console.log(res.profileObj);
+        login(res.profileObj)
+        refreshTokenSetup(res);
+    };
 
+    const onFailure = (res: any) => {
+        console.log('Login failed: res:', res);
+        alert(
+            `Failed to login`
+        );
+    };
+
+    const { signIn } = useGoogleLogin({
+        onSuccess,
+        onFailure,
+        clientId,
+        isSignedIn: true,
+        accessType: 'offline'
+    });
 
     return (
         <div style={{
@@ -28,16 +40,10 @@ const Login: FC<Props> = ({login}) => {
             alignItems: 'center',
             marginTop: '100px',
         }}>
-            <h1>Login Version</h1>
-            <GoogleLogin
-                    clientId="635810294506-bmomp5mvp0fga3akpmu99al6v5alli8f.apps.googleusercontent.com"
-                    buttonText="Ingresar con Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    cookiePolicy={'single_host_origin'}
-                    isSignedIn={true}
-                />
+            <h1>Ingreso</h1>
+            <GoogleButton onClick={signIn} text='Iniciar Sesión' />
         </div>
+      
     )
 }
 
