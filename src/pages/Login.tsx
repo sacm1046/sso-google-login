@@ -28,7 +28,7 @@ const Login: FC<Props> = ({login}) => {
             alignItems: 'center',
             marginTop: '100px',
         }}>
-            <h1>Login</h1>
+            <h1>Login Version</h1>
             <GoogleLogin
                     clientId="635810294506-bmomp5mvp0fga3akpmu99al6v5alli8f.apps.googleusercontent.com"
                     buttonText="Ingresar con Google"
